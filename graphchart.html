@@ -76,7 +76,7 @@
         .x(function(d) { return xScale( d.x);})
         .y(function(d) { return yScale( d.y); });
 
-      //filling line data, axis data, and setting ranges 
+      //filling line data, axis data, and setting ranges
       function render(){
         var data = newData(8,3);
 
@@ -106,16 +106,27 @@
           svg.selectAll(".y.axis").transition().duration(1500).call(yAxis)
         }
 
-        svg.selectAll(".line").remove();
-
+        // draw the lines
         var lines = svg.selectAll(".line").data(data).attr("class","line");
 
-        lines.enter().append("path")
-          .attr("class","line")
-          .attr("d",line).style("stroke","blue")
-          ;
-      }
+        //transition from previous paths to new ones
+        lines.transition().duration(1500)
+          .attr("d", line)
+          .style("stroke", function() {
+            return '#'+ Math.floor(Math.random()*16777215).toString(16);
+          });
 
+        //enter any new lines
+        lines.enter()
+          .append("path")
+          .attr("class","line")
+          .attr("d",line)
+          .style("stroke",function() {
+            return '#'+ Math.floor(Math.random()*16777215).toString(16);
+          });
+
+        lines.exit().remove();
+      }
       render();
       setInterval(render, 1500);
 
