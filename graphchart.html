@@ -45,6 +45,7 @@
   </head>
   <body>
     <script type="text/javascript">
+      // a way for us to generate data
       function newData(lineNumber, points) {
         return d3.range(lineNumber).map(function() {
           return d3.range(points).map(function(item, index) {
@@ -52,69 +53,68 @@
           });
         });
       }
-
+      // setup
       var width = 700;
       var height = 350;
-
       var margin = { top: 20, right: 20, bottom: 20, left: 50 };
 
+
+      //add the svg structure
       var svg = d3.select("body").append("svg")
         .attr("height", height)
         .attr("width", width)
         .append("g")
         .attr("transform","translate(" + margin.left + "," + margin.right + ")");
 
-        var xScale = d3.scale.linear()
-          .range([0, width - margin.left - margin.right]);
+      var xScale = d3.scale.linear()
+        .range([0, width - margin.left - margin.right]);
 
-        var yScale = d3.scale.linear()
-          .range([height - margin.top - margin.bottom, 0]);
+      var yScale = d3.scale.linear()
+        .range([height - margin.top - margin.bottom, 0]);
 
-        var line = d3.svg.line().interpolate('monotone')
-          .x(function(d) { return xScale( d.x);})
-          .y(function(d) { return yScale( d.y); });
+      var line = d3.svg.line().interpolate('monotone')
+        .x(function(d) { return xScale( d.x);})
+        .y(function(d) { return yScale( d.y); });
 
-        function render(){
-          var data = newData(8,3);
+      //filling line data, axis data, and setting ranges 
+      function render(){
+        var data = newData(8,3);
 
-          var yMin = data.reduce(function(pv,cv){
-            var currentMin = cv.reduce(function(pv,cv){
-              return Math.min(pv,cv.y);
-            },100)
-            return Math.min(pv,currentMin);
-          },100);
-          var yMax = data.reduce(function(pv,cv){
-            var currentMax = cv.reduce(function(pv,cv){
-              return Math.max(pv,cv.y);
-            },0)
-            return Math.max(pv,currentMax);
-          },0);
+        var yMin = data.reduce(function(pv,cv){
+          var currentMin = cv.reduce(function(pv,cv){
+            return Math.min(pv,cv.y);
+          },100)
+          return Math.min(pv,currentMin);
+        },100);
+        var yMax = data.reduce(function(pv,cv){
+          var currentMax = cv.reduce(function(pv,cv){
+            return Math.max(pv,cv.y);
+          },0)
+          return Math.max(pv,currentMax);
+        },0);
 
-          yScale.domain([yMin,yMax]);
+        yScale.domain([yMin,yMax]);
 
-          var yAxis = d3.svg.axis().scale(yScale).orient("left");
+        var yAxis = d3.svg.axis().scale(yScale).orient("left");
 
-          svg.selectAll(".y.axis").remove();
-
-          // if (svg.selectAll('.y.axis')[0].length < 1){
-          //   svg.append("g")
-          //   .attr("class", "y axis")
-          //   .call(yAxis)
-          // } else {
-          //
-          // }
-
-          svg.append("g").attr("class","y axis").call(yAxis);
-
-          svg.selectAll(".line").remove();
-
-          var lines = svg.selectAll(".line").data(data).attr("class","line");
-
-          lines.enter().append("path")
-            .attr("class","line")
-            .attr("d",line).style("stroke","blue")
-            ;
+        // if there is not axis we draw one, if there is one, we transition into it.
+        if (svg.selectAll('.y.axis')[0].length < 1){
+          svg.append("g")
+          .attr("class", "y axis")
+          .call(yAxis)
+        } else {
+          svg.selectAll(".y.axis").transition().duration(1500).call(yAxis)
         }
+
+        svg.selectAll(".line").remove();
+
+        var lines = svg.selectAll(".line").data(data).attr("class","line");
+
+        lines.enter().append("path")
+          .attr("class","line")
+          .attr("d",line).style("stroke","blue")
+          ;
+      }
 
       render();
       setInterval(render, 1500);
