@@ -44,15 +44,13 @@
     </style>
   </head>
   <body>
+    <div>
+      Number of Lines:
+      <input id="linecount" name="lines" value="7" onkeyup="render()"></input>
+      Points per Line:
+      <input id="pointcount" name="points" value="3" onkeyup="render()"></input>
+    </div>
     <script type="text/javascript">
-      // a way for us to generate data
-      function newData(lineNumber, points) {
-        return d3.range(lineNumber).map(function() {
-          return d3.range(points).map(function(item, index) {
-            return { x: index, y: Math.random() * 100 };
-          });
-        });
-      }
       // setup
       var width = 700;
       var height = 350;
@@ -76,9 +74,18 @@
         .x(function(d) { return xScale( d.x);})
         .y(function(d) { return yScale( d.y); });
 
+        // a way for us to generate data
+        function newData(lineNumber, points) {
+          return d3.range(lineNumber).map(function() {
+            return d3.range(points).map(function(item, index) {
+              return { x: index/(points-1), y: Math.random() * 100 };
+            });
+          });
+        }
+
       //filling line data, axis data, and setting ranges
       function render(){
-        var data = newData(8,3);
+        var data = newData(+document.getElementById("linecount").value, +document.getElementById("pointcount").value)
 
         var yMin = data.reduce(function(pv,cv){
           var currentMin = cv.reduce(function(pv,cv){
