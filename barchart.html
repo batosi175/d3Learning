@@ -39,36 +39,36 @@
       .domain([0, chartdata.length*.33, chartdata.length*.66, chartdata.length])
       .range(['#d6e9c6', '#bce8f1', '#faebcc', '#ebccd1'])
 
-    // set up overall svg
-    d3.select('#bar-chart').append('svg')
-    .attr('width', width)
-    .attr('height', height)
-    .style('background', '#bce8f1')
-    // set up data itself
-    .selectAll('rect').data(chartdata)
-    .enter().append('rect')
-    //appending styles and postition data
-    .style({'fill': function(data, i){ return colors(i); }, 'stroke': '#31708f', 'stroke-width': '5'})
-    .attr('width', xScale.rangeBand())
-    .attr('height', function (data) {
-        return yScale(data);
-    })
-    .attr('x', function (data, i) {
-        return xScale(i);
-    })
-    .attr('y', function (data) {
-        return height - yScale(data);
-    })
-    .on("mouseover", function(data) {
-      dynamicColor = this.style.fill;
-      d3.select(this)
-        .style('fill', '#3c763d');
-    })
-    .on("mouseout", function(data) {
-      d3.select(this)
-        .style("fill", dynamicColor)
-    })
-    ;
+    // // set up overall svg
+    // d3.select('#bar-chart').append('svg')
+    // .attr('width', width)
+    // .attr('height', height)
+    // .style('background', '#bce8f1')
+    // // set up data itself
+    // .selectAll('rect').data(chartdata)
+    // .enter().append('rect')
+    // //appending styles and postition data
+    // .style({'fill': function(data, i){ return colors(i); }, 'stroke': '#31708f', 'stroke-width': '5'})
+    // .attr('width', xScale.rangeBand())
+    // .attr('height', function (data) {
+    //     return yScale(data);
+    // })
+    // .attr('x', function (data, i) {
+    //     return xScale(i);
+    // })
+    // .attr('y', function (data) {
+    //     return height - yScale(data);
+    // })
+    // .on("mouseover", function(data) {
+    //   dynamicColor = this.style.fill;
+    //   d3.select(this)
+    //     .style('fill', '#3c763d');
+    // })
+    // .on("mouseout", function(data) {
+    //   d3.select(this)
+    //     .style("fill", dynamicColor)
+    // })
+    // ;
 
     // bar chart with transitions:
     var awesome = d3.select('#bbar-chart').append('svg')
