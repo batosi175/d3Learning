@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>D3 Force Graph</title>
+    <title>D3 moonvisualiezer (not really)</title>
     <script type="text/javascript" src="d3/d3.v3.js"></script>
     <style type="text/css">
 
@@ -13,6 +13,7 @@
 
     <script type="text/javascript">
       //gives us data
+      var size = 25;
       function gridData() {
         var data = new Array();
         var xpos = 1;
@@ -22,15 +23,15 @@
         var click = 0;
 
         // iterate for rows
-        for (var row = 0; row < 10; row++) {
+        for (var row = 0; row < size; row++) {
           data.push(new Array() );
           //go over cells/columns
-          for (var column = 0; column < 10; column ++) {
+          for (var column = 0; column < size; column ++) {
             //randomized clicks
             // click = Math.round(Math.random() * 100 );
             data[row].push({
-              x: xpos,
-              y: ypos,
+              x: row,
+              y: column,
               width: width,
               height: height,
               click: click
@@ -48,7 +49,13 @@
 
       var gridData = gridData();
 
+      var xyScale = d3.scale.ordinal()
+        .domain(d3.range(0, gridData.length))
+        .rangeBands([0, 510])
+      ;
+
       console.log(gridData);
+      console.log(gridData.length);
 
       var grid = d3.select("#grid")
         .append("svg")
@@ -64,10 +71,10 @@
         .data(function(d) { return d; })
         .enter().append("rect")
           .attr("class", "square")
-          .attr("x", function(d) { return d.x; })
-          .attr("y", function(d) { return d.y; })
-          .attr("width", function(d) { return d.width; })
-          .attr("height", function(d) { return d.height; })
+          .attr("x", function(d, i) { return  xyScale(d.x); })
+          .attr("y", function(d, i) { return xyScale(d.y); })
+          .attr("width", xyScale.rangeBand())
+          .attr("height", xyScale.rangeBand())
           .style("fill", "#fff")
           .style("stroke", "#222")
 
