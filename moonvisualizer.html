@@ -27,7 +27,7 @@
           //go over cells/columns
           for (var column = 0; column < 10; column ++) {
             //randomized clicks
-            click = Math.round(Math.random() * 100 );
+            // click = Math.round(Math.random() * 100 );
             data[row].push({
               x: xpos,
               y: ypos,
@@ -71,7 +71,7 @@
           .style("fill", "#fff")
           .style("stroke", "#222")
 
-          .on('click', function(d) {
+          .on('mouseover', function(d) {
             d.click ++;
             if ((d.click)%4 == 0 ) { d3.select(this).style("fill", "#fff"); }
             if ((d.click)%4 == 1 ) { d3.select(this).style("fill", "#2c93E8"); }
