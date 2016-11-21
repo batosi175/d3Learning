@@ -17,6 +17,7 @@
       var width = 600;
       var height = 600;
       var delay = 500;
+      var longDelay = 1500;
       function gridData() {
         var data = new Array();
         var xpos = 1;
@@ -31,6 +32,7 @@
           for (var column = 0; column < size; column ++) {
             //randomized clicks
             click = Math.round(Math.random() * 100 );
+            // click = 3;
             data[row].push({
               x: row,
               y: column,
@@ -86,11 +88,43 @@
           })
           .on('mouseover', function(d) {
             d.click ++;
-            if ((d.click)%4 == 0 ) { d3.select(this).transition().duration(delay).attr("transform", "rotate(360)").style("fill", "#fff"); }
-            if ((d.click)%4 == 1 ) { d3.select(this).transition().duration(delay).attr("transform", "rotate(360)").style("fill", "#2c93E8"); }
-            if ((d.click)%4 == 2 ) { d3.select(this).transition().duration(delay).attr("transform", "rotate(360)").style("fill", "#F56C4E"); }
-            if ((d.click)%4 == 3 ) { d3.select(this).transition().duration(delay).attr("transform", "rotate(360)").style("fill", "#838690"); }
+            if ((d.click)%4 == 0 ) { d3.select(this)
+              .transition().duration(delay)
+                .style("fill", "#fff")
+                .attr("transform", `translate(${-30},${-30})` )
+                .attr("width",xyScale.rangeBand()*2)
+                .attr("height", xyScale.rangeBand()*2)
+                .transition().duration(delay)
+                  .attr("transform", 'translate(0,0)')
+                  .attr("width",xyScale.rangeBand())
+                  .attr("height", xyScale.rangeBand());
+            }
+            if ((d.click)%4 == 1 ) { d3.select(this).transition().duration(delay).style("fill", "#2c93E8").attr("transform", `translate(${-30},${-30})` )
+            .attr("width",xyScale.rangeBand()*2)
+            .attr("height", xyScale.rangeBand()*2)
+            .transition().duration(delay)
+              .attr("transform", 'translate(0,0)')
+              .attr("width",xyScale.rangeBand())
+              .attr("height", xyScale.rangeBand()); }
+            if ((d.click)%4 == 2 ) { d3.select(this).transition().duration(delay).style("fill", "#F56C4E").attr("transform", `translate(${-30},${-30})` )
+            .attr("width",xyScale.rangeBand()*2)
+            .attr("height", xyScale.rangeBand()*2)
+            .transition().duration(delay)
+              .attr("transform", 'translate(0,0)')
+              .attr("width",xyScale.rangeBand())
+              .attr("height", xyScale.rangeBand()); }
+            if ((d.click)%4 == 3 ) { d3.select(this).transition().duration(delay).style("fill", "#838690").attr("transform", `translate(${-30},${-30})` )
+            .attr("width",xyScale.rangeBand()*2)
+            .attr("height", xyScale.rangeBand()*2)
+            .transition().duration(delay)
+              .attr("transform", 'translate(0,0)')
+              .attr("width",xyScale.rangeBand())
+              .attr("height", xyScale.rangeBand()); }
           })
+          // .on("mouseleave", function(d) {
+          //   console.log("mouseleave");
+          //   d3.select(this).transition().duration(delay).attr("transform", "translate(0,0)");
+          // })
           .on('click', function(d) {
             var color = '';
             if ((d.click)%4 === 0 ) {
