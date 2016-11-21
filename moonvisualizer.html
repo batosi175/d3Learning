@@ -79,7 +79,6 @@
           .attr("height", xyScale.rangeBand())
           .style("fill", "#fff")
           .style("stroke", "#ccc")
-
           .style("fill", function(d) {
             if ((d.click)%4 == 0 ) { return  "#fff"; }
             if ((d.click)%4 == 1 ) { return  "#2c93E8"; }
@@ -88,21 +87,33 @@
           })
           .on('mouseover', function(d) {
             var color;
+            d.click ++;
             if ((d.click)%4 == 0 ) { color =  "#fff"; }
             if ((d.click)%4 == 1 ) { color =   "#2c93E8"; }
             if ((d.click)%4 == 2 ) { color =  "#F56C4E"; }
             if ((d.click)%4 == 3 ) { color =  "#838690"; }
-            d.click ++;
             d3.select(this)
               .transition().duration(delay)
                 .style("fill", color)
                 .attr("transform", `translate(${-xyScale.rangeBand()*2},${-xyScale.rangeBand()*2})` )
                 .attr("width",xyScale.rangeBand()*2)
                 .attr("height", xyScale.rangeBand()*2)
+                // handles rotation
+                //return to original size, otherwize things will break
                 .transition().duration(delay)
-                  .attr("transform", 'translate(0,0)')
-                  .attr("width",xyScale.rangeBand())
-                  .attr("height", xyScale.rangeBand());
+                  .attrTween("transform", function(){
+                    var i = d3.interpolate(0,360);
+                    return function(t) {
+                      return `translate(${-xyScale.rangeBand()*2},${-xyScale.rangeBand()*2}) rotate(` + i(t) + `,
+                      ${xyScale(d.x) + xyScale.rangeBand() },
+                      ${xyScale(d.y) + xyScale.rangeBand() })`
+                    }
+                  })
+                  .transition().duration(delay)
+                    .attr("transform", 'translate(0,0)')
+                    .attr("width",xyScale.rangeBand())
+                    .attr("height", xyScale.rangeBand())
+              ;
           })
           // .on("mouseleave", function(d) {
           //   console.log("mouseleave");
@@ -120,14 +131,15 @@
               color = 'grey';
             }
             alert(`Values [${d.x},${d.y}] \nPosition [${xyScale(d.x)},${xyScale(d.y)}] \nColor: ${color}`);
-          })
+          });
 
+          //cant use for some reason, might be because of declaration ordering.
           //calculates positioning for the rotation
           function rotTween(){
             var i = d3.interpolate(0, 360);
             return function(t) {
               return "rotate(" + i(t) + ",100,100)"
-            };
+            }
           }
     </script>
   </body>
