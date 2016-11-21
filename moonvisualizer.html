@@ -16,6 +16,7 @@
       var size = 40;
       var width = 600;
       var height = 600;
+      var delay = 500;
       function gridData() {
         var data = new Array();
         var xpos = 1;
@@ -29,7 +30,7 @@
           //go over cells/columns
           for (var column = 0; column < size; column ++) {
             //randomized clicks
-            // click = Math.round(Math.random() * 100 );
+            click = Math.round(Math.random() * 100 );
             data[row].push({
               x: row,
               y: column,
@@ -75,20 +76,33 @@
           .attr("width", xyScale.rangeBand())
           .attr("height", xyScale.rangeBand())
           .style("fill", "#fff")
-          .style("stroke", "#222")
+          .style("stroke", "#ccc")
 
-          .on('mouseover', function(d) {
-            d.click ++;
-            if ((d.click)%4 == 0 ) { d3.select(this).style("fill", "#fff"); }
-            if ((d.click)%4 == 1 ) { d3.select(this).style("fill", "#2c93E8"); }
-            if ((d.click)%4 == 2 ) { d3.select(this).style("fill", "#F56C4E"); }
-            if ((d.click)%4 == 3 ) { d3.select(this).style("fill", "#838690"); }
-          })
           .style("fill", function(d) {
             if ((d.click)%4 == 0 ) { return  "#fff"; }
             if ((d.click)%4 == 1 ) { return  "#2c93E8"; }
             if ((d.click)%4 == 2 ) { return  "#F56C4E"; }
             if ((d.click)%4 == 3 ) { return  "#838690"; }
+          })
+          .on('mouseover', function(d) {
+            d.click ++;
+            if ((d.click)%4 == 0 ) { d3.select(this).transition().duration(delay).attr("transform", "rotate(360)").style("fill", "#fff"); }
+            if ((d.click)%4 == 1 ) { d3.select(this).transition().duration(delay).attr("transform", "rotate(360)").style("fill", "#2c93E8"); }
+            if ((d.click)%4 == 2 ) { d3.select(this).transition().duration(delay).attr("transform", "rotate(360)").style("fill", "#F56C4E"); }
+            if ((d.click)%4 == 3 ) { d3.select(this).transition().duration(delay).attr("transform", "rotate(360)").style("fill", "#838690"); }
+          })
+          .on('click', function(d) {
+            var color = '';
+            if ((d.click)%4 === 0 ) {
+              color = 'white';
+            } else if ((d.click)%4 === 1 ) {
+              color = 'blue';
+            } else if ((d.click)%4 === 2 ){
+              color = 'orange';
+            } else {
+              color = 'grey';
+            }
+            alert(`Values [${d.x},${d.y}] \nPosition [${xyScale(d.x)},${xyScale(d.y)}] \nColor: ${color}`);
           })
       ;
     </script>
