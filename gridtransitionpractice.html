@@ -94,7 +94,7 @@
             if ((d.click)%4 == 3 ) { color =  "#838690"; }
             d3.select(this)
               .transition().duration(delay)
-                .style("fill", color)
+                // .style("fill", color)
                 .attr("transform", `translate(${-xyScale.rangeBand()*2},${-xyScale.rangeBand()*2})` )
                 .attr("width",xyScale.rangeBand()*2)
                 .attr("height", xyScale.rangeBand()*2)
